@@ -10,7 +10,6 @@ local humanoid = character:FindFirstChild("Humanoid")
 local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
 local TweenService = game:GetService("TweenService")
 local storage = game:GetService("ReplicatedStorage")
-local storage = game:GetService("ReplicatedStorage")
 
 -- Dash Effect From Storage
 local dash = storage.Dash
