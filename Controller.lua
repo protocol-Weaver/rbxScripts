@@ -219,7 +219,7 @@ local function stateChange(old, new)
 end
 
 
--- Toggles Flight Mode
+-- Toggles Flight Mode and makes the player fly using Body Gyro to float and Body Velocity to move
 local function ToggleFlight()
     -- Check if the player is jumping and in freefall state
     if not isjumping or humanoid:GetState() ~= Enum.HumanoidStateType.Freefall then return end
@@ -227,7 +227,7 @@ local function ToggleFlight()
     -- Toggle the flying state
     flying = not flying -- Toggles Flight Mode
     
-    -- Data Required For Flight
+    -- Body Gyro used for Rotational Force and to indicate where the body will be pointing and BodyVelocity to move in a Direction
     bodyVelocity.Parent = flying and humanoidRootPart or nil
     bodyGyro.Parent = flying and humanoidRootPart or nil
     bodyGyro.CFrame = humanoidRootPart.CFrame
