@@ -11,15 +11,15 @@ local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
 local TweenService = game:GetService("TweenService")
 local storage = game:GetService("ReplicatedStorage")
 
+-- Load the animation onto the animator
+local animator = humanoid:FindFirstChildOfClass("Animator")
+
 -- Dash Effect From Storage
 local dash = storage.Dash
 
 -- Create a new "Animation" instance and assign an animation asset ID
 local kickAnimation = Instance.new("Animation")
-kickAnimation.AnimationId = "rbxassetid://18314102259"
 
--- Load the animation onto the animator
-local kickAnimationTrack = humanoid:LoadAnimation(kickAnimation)
 
 -- Dash Effect Trail Creator using 2 Trail Attachments
 local function TrailConnector()
@@ -120,7 +120,7 @@ local function Slash()
     -- Set the animation ID
     Animation.AnimationId = "rbxassetid://18419828546"
     -- Load the animation onto the humanoid animator
-    local Track = humanoid.Animator:LoadAnimation(Animation)
+    local Track = animator:LoadAnimation(Animation)
     -- Play the animation
     Track:Play()
     -- Wait for the animation to stop
@@ -141,7 +141,11 @@ local function Dash()
     trail.Attachment0 = humanoidRootPart.TrailAttachment0
     trail.Attachment1 = humanoidRootPart.TrailAttachment1
     trail.Parent = humanoidRootPart
-
+	
+    -- Load the animation onto the animator
+    
+    kickAnimation.AnimationId = "rbxassetid://18314102259"
+    local kickAnimationTrack = animator:LoadAnimation(kickAnimation)
     -- Play the dash animation
     kickAnimationTrack:Play()
 
@@ -194,19 +198,13 @@ local isjumping = false
 
 -- Create a new BodyVelocity instance
 local bodyVelocity = Instance.new("BodyVelocity")
--- Create a new BodyGyro instance
-local bodyGyro = Instance.new("BodyGyro")
+
+alignOrientation = Instance.new("AlignOrientation")
 
 -- Set the maximum force for the BodyVelocity to a high value
 bodyVelocity.MaxForce = Vector3.new(1, 1, 1) * 10^6
 -- Set the power (P) value for the BodyVelocity
 bodyVelocity.P = 10^6
-
--- Set the maximum torque for the BodyGyro to a high value
-bodyGyro.MaxTorque = Vector3.new(1, 1, 1) * 10^6
--- Set the power (P) value for the BodyGyro
-bodyGyro.P = 10^6
-
 
 -- Toggles From Jumping To Flying Or Flying to Jumping
 local function stateChange(old, new)
@@ -218,7 +216,7 @@ local function stateChange(old, new)
 end
 
 
--- Toggles Flight Mode and makes the player fly using Body Gyro to float and Body Velocity to move
+-- Toggles Flight Mode and makes the player fly using AlignOrientation to float and BodyVelocity to move
 local function ToggleFlight()
     -- Check if the player is jumping and in freefall state
     if not isjumping or humanoid:GetState() ~= Enum.HumanoidStateType.Freefall then return end
@@ -226,10 +224,10 @@ local function ToggleFlight()
     -- Toggle the flying state
     flying = not flying -- Toggles Flight Mode
     
-    -- Body Gyro used for Rotational Force and to indicate where the body will be pointing and BodyVelocity to move in a Direction
+    -- AlignOrientation used for Rotational Force and to indicate where the body will be pointing and BodyVelocity to move in a Direction
     bodyVelocity.Parent = flying and humanoidRootPart or nil
-    bodyGyro.Parent = flying and humanoidRootPart or nil
-    bodyGyro.CFrame = humanoidRootPart.CFrame
+    alignOrientation.Parent = flying and humanoidRootPart or nil
+    alignOrientation.CFrame = humanoidRootPart.CFrame
     bodyVelocity.Velocity = Vector3.new()
 
     -- Disable default animations when flying
@@ -249,12 +247,13 @@ local function ToggleFlight()
             end
             
             -- Changing body direction with respect to camera and making it move forward
-            bodyGyro.CFrame = camera.CFrame
+            alignOrientation.CFrame = camera.CFrame
             bodyVelocity.Velocity = direction * 100
             wait()
         end
     end
 end
+
 
 humanoid.stateChanged:Connect(stateChange) -- Changes Jumping State
 
