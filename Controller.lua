@@ -36,11 +36,10 @@ local staminaRegenRate = 50 -- Per second
 -- Create a new LinearVelocity instance
 local alignOrientation = Instance.new("AlignOrientation")
 local linearVelocity = Instance.new("LinearVelocity")
--- Set the maximum force for the LinearVelocity to a high value
-linearVelocity.MaxForce = Vector3.new(1, 1, 1) * 10^6
--- Set the power (P) value for the LinearVelocity
-linearVelocity.P = 10^6
-
+-- Set up LinearVelocity
+linearVelocity.Attachment0 = Instance.new("Attachment", humanoidRootPart)
+linearVelocity.MaxForce = 10^6 -- Setting a high force to ensure it overcomes gravity
+linearVelocity.VectorVelocity = Vector3.zero -- Initially set to zero
 
 -- Utility Functions
 
@@ -231,23 +230,20 @@ end
 
 
 --- Toggles the player's flight mode, allowing the player to fly when in a freefall state.
--- This function allows the player to toggle flight mode when in a freefall state. It uses body velocity and align orientation to control flight direction and speed.
--- Toggles Flight Mode and makes the player fly using AlignOrientation to float and BodyVelocity to move
+-- This function allows the player to toggle flight mode when in a freefall state. It uses linear velocity and align orientation to control flight direction and speed.
 local function ToggleFlight()
 
 	-- Check if the player is jumping and in freefall state
 	if not isJumping or humanoid:GetState() ~= Enum.HumanoidStateType.Freefall then return end
 
-
 	-- Toggle the flying state
 	flying = not flying -- Toggles Flight Mode
 
 	-- AlignOrientation used for Rotational Force and to indicate where the body will be pointing and LinearVelocity to move in a Direction
-
 	linearVelocity.Parent = flying and humanoidRootPart or nil
 	alignOrientation.Parent = flying and humanoidRootPart or nil
 	alignOrientation.CFrame = humanoidRootPart.CFrame
-	linearVelocity.Velocity = Vector3.new()
+	linearVelocity.VectorVelocity = Vector3.zero
 
 	-- Disable default animations when flying
 	character.Animate.Disabled = flying -- Blocks Default Animation
@@ -267,11 +263,12 @@ local function ToggleFlight()
 
 			-- Changing body direction with respect to camera and making it move forward
 			alignOrientation.CFrame = camera.CFrame
-			linearVelocity.Velocity = direction * 100
+			linearVelocity.VectorVelocity = direction * 100
 			wait()
 		end
 	end
 end
+
 
 -- Stamina Regeneration
 
