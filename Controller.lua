@@ -36,7 +36,7 @@ local staminaRegenRate = 50 -- Per second
 -- Create a new BodyVelocity instance
 local bodyVelocity = Instance.new("BodyVelocity")
 local alignOrientation = Instance.new("AlignOrientation")
-
+local linearVelocity = Instance.new("LinearVelocity")
 -- Set the maximum force for the BodyVelocity to a high value
 bodyVelocity.MaxForce = Vector3.new(1, 1, 1) * 10^6
 -- Set the power (P) value for the BodyVelocity
@@ -245,10 +245,10 @@ local function ToggleFlight()
 
 	-- AlignOrientation used for Rotational Force and to indicate where the body will be pointing and BodyVelocity to move in a Direction
 
-	bodyVelocity.Parent = flying and humanoidRootPart or nil
+	linearVelocity.Parent = flying and humanoidRootPart or nil
 	alignOrientation.Parent = flying and humanoidRootPart or nil
 	alignOrientation.CFrame = humanoidRootPart.CFrame
-	bodyVelocity.Velocity = Vector3.new()
+	linearVelocity.Velocity = Vector3.new()
 
 	-- Disable default animations when flying
 	character.Animate.Disabled = flying -- Blocks Default Animation
@@ -268,7 +268,7 @@ local function ToggleFlight()
 
 			-- Changing body direction with respect to camera and making it move forward
 			alignOrientation.CFrame = camera.CFrame
-			bodyVelocity.Velocity = direction * 100
+			linearVelocity.Velocity = direction * 100
 			wait()
 		end
 	end
