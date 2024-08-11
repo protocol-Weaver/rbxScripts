@@ -34,13 +34,12 @@ local staminaRegenRate = 50 -- Per second
 -- Flight Management
 
 -- Create a new BodyVelocity instance
-local bodyVelocity = Instance.new("BodyVelocity")
 local alignOrientation = Instance.new("AlignOrientation")
 local linearVelocity = Instance.new("LinearVelocity")
 -- Set the maximum force for the BodyVelocity to a high value
-bodyVelocity.MaxForce = Vector3.new(1, 1, 1) * 10^6
+linearVelocity.MaxForce = Vector3.new(1, 1, 1) * 10^6
 -- Set the power (P) value for the BodyVelocity
-bodyVelocity.P = 10^6
+linearVelocity.P = 10^6
 
 
 -- Utility Functions
