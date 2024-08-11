@@ -33,12 +33,12 @@ local staminaRegenRate = 50 -- Per second
 
 -- Flight Management
 
--- Create a new BodyVelocity instance
+-- Create a new LinearVelocity instance
 local alignOrientation = Instance.new("AlignOrientation")
 local linearVelocity = Instance.new("LinearVelocity")
--- Set the maximum force for the BodyVelocity to a high value
+-- Set the maximum force for the LinearVelocity to a high value
 linearVelocity.MaxForce = Vector3.new(1, 1, 1) * 10^6
--- Set the power (P) value for the BodyVelocity
+-- Set the power (P) value for the LinearVelocity
 linearVelocity.P = 10^6
 
 
@@ -242,7 +242,7 @@ local function ToggleFlight()
 	-- Toggle the flying state
 	flying = not flying -- Toggles Flight Mode
 
-	-- AlignOrientation used for Rotational Force and to indicate where the body will be pointing and BodyVelocity to move in a Direction
+	-- AlignOrientation used for Rotational Force and to indicate where the body will be pointing and LinearVelocity to move in a Direction
 
 	linearVelocity.Parent = flying and humanoidRootPart or nil
 	alignOrientation.Parent = flying and humanoidRootPart or nil
